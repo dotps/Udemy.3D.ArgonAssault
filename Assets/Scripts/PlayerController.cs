@@ -2,14 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 // using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     // [SerializeField] private InputAction movement; // New Input System
-    
-    [SerializeField] private float _speed = 10f;
+    [Header("General")]
+    [Tooltip("Подсказка")][SerializeField] private float _speed = 10f;
     [SerializeField] private float _speedRotation = 10f;
+    [SerializeField] private GameObject[] _lasers;
 
     private float xRange = 8;
     private float yRange = 5;
@@ -26,24 +29,50 @@ public class PlayerController : MonoBehaviour
     private float _hInput;
     private float _vInput;
     private Vector3 _direction;
+
+    public bool isDead;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        LaserSetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
+        
         _hInput = Input.GetAxis("Horizontal");
         _vInput = Input.GetAxis("Vertical");
         _direction = new Vector3(_hInput, _vInput, 0);
         
         MovePlayerOldInput();
         Rotation();
+        Shooting();
         // MovePlayerNewInput();
+    }
+
+    private void Shooting()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            LaserSetActive(true);
+        }
+        else if (Input.GetButtonUp("Fire1"))
+        {
+            LaserSetActive(false);
+        }
+    }
+
+    private void LaserSetActive(bool active)
+    {
+        foreach (var laser in _lasers)
+        {
+            var particleEmission = laser.GetComponent<ParticleSystem>().emission;
+            particleEmission.enabled = active;
+        }
     }
 
     private void Rotation()
@@ -90,4 +119,16 @@ public class PlayerController : MonoBehaviour
     {
         // movement.Disable(); // New Input System
     }
+
+    public void Die()
+    {
+        isDead = true;
+        Invoke("ReloadLevel", 1f);
+    }
+
+    private void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    
 }
