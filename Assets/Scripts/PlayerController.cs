@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Подсказка")][SerializeField] private float _speed = 10f;
     [SerializeField] private float _speedRotation = 10f;
     [SerializeField] private GameObject[] _lasers;
+    [SerializeField] private GameObject _vfxExplosive;
 
     private float xRange = 8;
     private float yRange = 5;
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDead) return;
+        // if (isDead) return;
         
         _hInput = Input.GetAxis("Horizontal");
         _vInput = Input.GetAxis("Vertical");
@@ -120,9 +121,16 @@ public class PlayerController : MonoBehaviour
         // movement.Disable(); // New Input System
     }
 
-    public void Die()
+    public void Die(Vector3 pointCollision = new Vector3())
     {
-        isDead = true;
+        // isDead = true;
+        this.enabled = false;
+        GetComponent<Collider>().enabled = false;
+        var rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.None;
+        rb.useGravity = true;
+        _vfxExplosive.transform.localPosition = pointCollision;
+        _vfxExplosive.SetActive(true);
         Invoke("ReloadLevel", 1f);
     }
 

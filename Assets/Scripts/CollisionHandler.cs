@@ -15,13 +15,13 @@ public class CollisionHandler : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("OnCollisionEnter " + collision.gameObject.name);
-        _player.Die();
+        Vector3 pointCollision = collision.GetContact(0).point;
+        Vector3 localPointCollision = transform.InverseTransformPoint(pointCollision);
+        _player.Die(localPointCollision);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter " + other.gameObject.name);
-        _player.Die();
+        _player.Die(); 
     }
 }
