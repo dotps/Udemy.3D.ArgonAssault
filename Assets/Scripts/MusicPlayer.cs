@@ -11,7 +11,7 @@ public class MusicPlayer : MonoBehaviour
     {
         int countMusicPlayers = FindObjectsOfType<MusicPlayer>().Length;
         if (countMusicPlayers > 1)
-        {
+        { 
             Destroy(gameObject);
         }
         else
