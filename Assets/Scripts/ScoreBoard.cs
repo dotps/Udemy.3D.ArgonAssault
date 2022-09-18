@@ -9,6 +9,6 @@ public class ScoreBoard : MonoBehaviour
     public void IncreaseScore(int value)
     {
         _score += value;
-        Debug.Log(_score);
+        Debug.Log("Score: " + _score);
     }
 }
