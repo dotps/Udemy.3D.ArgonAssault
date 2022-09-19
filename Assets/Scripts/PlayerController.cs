@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _direction;
 
     public bool isDead;
-    
 
     // Start is called before the first frame update
     void Start()
